@@ -9,7 +9,7 @@ import { IJobDetails } from "../../interface/forms";
 const JobDetailsForm: React.FC<{
   handleTab: (n: PageNumbers) => void;
 }> = ({ handleTab }) => {
-  const { handleChange, errors, touched, handleBlur, handleSubmit, values } =
+  const { handleChange, errors, touched, handleBlur, handleSubmit, values ,  } =
     useFormik<IJobDetails>({
       initialValues: {
         jobTitle: "",
@@ -22,6 +22,7 @@ const JobDetailsForm: React.FC<{
         jobLocation: Yup.string().required("Job Location is required"),
         jobPosition: Yup.string().required("Job position is required"),
       }),
+      // isInitialValid : true,
       onSubmit: (values) => {
         console.log({ values });
         handleTab(0);
@@ -29,7 +30,7 @@ const JobDetailsForm: React.FC<{
     });
 
   return (
-    <Box width="100%" as="form" onSubmit={handleSubmit as any}>
+    <Box width="100%" as="form" onSubmit={handleSubmit as any} >
       <Box width="100%">
         <FormInput
           label="Job Title"
