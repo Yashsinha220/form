@@ -5,38 +5,58 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { PageNumbers } from "../../interface/home";
 import { IJobDetails } from "../../interface/forms";
+import { useData } from "./DataProvider";
 
 const JobDetailsForm: React.FC<{
   handleTab: (n: PageNumbers) => void;
 }> = ({ handleTab }) => {
-  const { handleChange, errors, touched, handleBlur, handleSubmit, values ,  } =
-    useFormik<IJobDetails>({
-      initialValues: {
-        jobTitle: "",
-        jobDetails: "",
-        jobLocation: "",
-      },
-      validationSchema: Yup.object().shape({
-        jobTitle: Yup.string().required("Job Title is required"),
-        jobDetails: Yup.string().required("Job Details is required"),
-        jobLocation: Yup.string().required("Job Location is required"),
-        jobPosition: Yup.string().required("Job position is required"),
-      }),
-      isInitialValid : true,
-      onSubmit: (values) => {
-        console.log({ values });
-        handleTab(0);
-      },
-    });
+  const {
+    handleChange,
+    errors,
+    touched,
+    handleBlur,
+    handleSubmit,
+    values,
+    setFieldValue,
+    setFieldTouched,
+    isValid,
+  } = useFormik<IJobDetails>({
+    initialValues: {
+      jobTitle: "",
+      jobDetails: "",
+      jobLocation: "",
+    },
+    validationSchema: Yup.object().shape({
+      jobTitle: Yup.string().required("Job Title is required"),
+      jobDetails: Yup.string().required("Job Details is required"),
+      jobLocation: Yup.string().required("Job Location is required"),
+      jobPosition: Yup.string().required("Job position is required"),
+    }),
+    onSubmit: (values) => {
+      console.log("Hello Wordl");
+      console.log(values);
+      handleTab(2);
+    },
+  });
 
+  const context = useData();
   return (
-    <Box width="100%" as="form" onSubmit={handleSubmit as any} >
+    <Box width="100%" as="form" onSubmit={handleSubmit as any}>
       <Box width="100%">
         <FormInput
           label="Job Title"
           placeholder="Enter job title"
           name="jobTitle"
-          onChange={handleChange}
+          onChange={(event) => {
+            handleChange(event);
+            context?.setState({
+              ...context?.state,
+              jobDetails: {
+                ...context?.state?.jobDetails,
+                jobTitle: event.target.value,
+              },
+            });
+          }}
           onBlur={handleBlur}
           value={values?.jobTitle}
           error={errors?.jobTitle}
@@ -46,7 +66,16 @@ const JobDetailsForm: React.FC<{
           label="Job Details"
           placeholder="Enter job details"
           name="jobDetails"
-          onChange={handleChange}
+          onChange={(event) => {
+            handleChange(event);
+            context?.setState({
+              ...context?.state,
+              jobDetails: {
+                ...context?.state?.jobDetails,
+                jobDetails: event.target.value,
+              },
+            });
+          }}
           onBlur={handleBlur}
           value={values?.jobDetails}
           error={errors?.jobDetails}
@@ -56,7 +85,16 @@ const JobDetailsForm: React.FC<{
           label="Job Location"
           name="jobLocation"
           placeholder="Enter job location"
-          onChange={handleChange}
+          onChange={(event) => {
+            handleChange(event);
+            context?.setState({
+              ...context?.state,
+              jobDetails: {
+                ...context?.state?.jobDetails,
+                jobLocation: event.target.value,
+              },
+            });
+          }}
           onBlur={handleBlur}
           error={errors.jobLocation}
           touched={touched.jobLocation}
@@ -66,7 +104,7 @@ const JobDetailsForm: React.FC<{
           <Button colorScheme="gray" type="button" onClick={() => handleTab(0)}>
             Previous
           </Button>
-          <Button colorScheme="red" type="submit" onClick={()=>handleTab(2)}>
+          <Button colorScheme="red" type="submit" onClick={() => handleTab(2)}>
             Next
           </Button>
         </Flex>

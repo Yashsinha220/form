@@ -18,7 +18,7 @@ import DisplayCard from "./PreviewCard";
 import { PageNumbers } from "../../interface/home";
 
 const CustomTab: React.FC<TabProps> = ({ children, ...props }) => {
-  console.log(children)
+  console.log(children);
   return (
     <Tab p="1rem" fontFamily="Poppins" {...props}>
       {children}
@@ -31,7 +31,7 @@ const HomeLayout = () => {
 
   const handlePage = (pageNumber: PageNumbers) => {
     setPage(pageNumber);
-    console.log(pageNumber);
+    // console.log(pageNumber);
   };
 
   return (
@@ -58,7 +58,7 @@ const HomeLayout = () => {
                 <InterviewSettingsForm handleTab={handlePage} />
               </TabPanel>
             </TabPanels>
-            <DisplayCard  />
+            <DisplayCard />
           </Grid>
         </Tabs>
       </Container>

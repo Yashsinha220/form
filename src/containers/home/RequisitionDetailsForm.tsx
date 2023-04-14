@@ -1,5 +1,5 @@
 import { Button, Flex, Box } from "@chakra-ui/react";
-import React from "react";
+import React, { useEffect } from "react";
 import FormInput from "../../components/formComponents/FormInput";
 import FormSelect from "../../components/formComponents/FormSelect";
 import { useFormik } from "formik";
@@ -7,6 +7,8 @@ import * as Yup from "yup";
 import { PageNumbers } from "../../interface/home";
 import { IRequisitionDetails } from "../../interface/forms";
 import { genderOptions, urgencyOptions } from "./constants";
+import { useData } from "./DataProvider";
+import { log } from "console";
 
 const RequisitionDetailsForm: React.FC<{
   handleTab: (n: PageNumbers) => void;
@@ -39,21 +41,47 @@ const RequisitionDetailsForm: React.FC<{
       gender: Yup.string().required("Gender is required"),
     }),
     onSubmit: (values) => {
-      console.log(values);
+      console.log("Hello Wordl from job details");
+      console.log({ values });
       handleTab(1);
     },
   });
 
+  const context = useData();
+  // console.log(context);
+
+  useEffect(() => {
+    console.log("Inside the useEffect");
+    console.log(values);
+
+    context?.setState({
+      ...context?.state,
+      requisitionDetails: {
+        ...context?.state?.requisitionDetails,
+        gender: values.gender,
+        urgency: values.urgency,
+      },
+    });
+  }, [values.gender, values.urgency]);
 
   return (
-    
     <Box width="100%" as="form" onSubmit={handleSubmit as any}>
       <Box width="100%">
         <FormInput
           label="Requisition Title"
           placeholder="Enter requisition title"
           name="requisitionTitle"
-          onChange={handleChange}
+          onChange={(event) => {
+            handleChange(event);
+            context?.setState({
+              ...context?.state,
+              requisitionDetails: {
+                ...context?.state.requisitionDetails,
+                requisitionTitle: event.target.value,
+              },
+            });
+          }}
+          // onChange={()=>{}}
           onBlur={handleBlur}
           value={values?.requisitionTitle}
           error={errors?.requisitionTitle}
@@ -63,7 +91,16 @@ const RequisitionDetailsForm: React.FC<{
           label="Number of openings"
           placeholder="Enter number of openings"
           name="noOfOpenings"
-          onChange={handleChange}
+          onChange={(event) => {
+            handleChange(event);
+            context?.setState({
+              ...context?.state,
+              requisitionDetails: {
+                ...context?.state.requisitionDetails,
+                noOfOpenings: Number(event.target.value),
+              },
+            });
+          }}
           onBlur={handleBlur}
           value={values?.noOfOpenings}
           error={errors?.noOfOpenings}

@@ -1,5 +1,5 @@
 import { Button, Flex, Box } from "@chakra-ui/react";
-import React from "react";
+import React, { useEffect } from "react";
 import FormSelect from "../../components/formComponents/FormSelect";
 import { useFormik } from "formik";
 import { PageNumbers } from "../../interface/home";
@@ -10,6 +10,7 @@ import {
   interviewLanguageOptions,
   interviewModeOptions,
 } from "./constants";
+import { useData } from "./DataProvider";
 
 const InterviewDetailsForm: React.FC<{
   handleTab: (n: PageNumbers) => void;
@@ -29,14 +30,38 @@ const InterviewDetailsForm: React.FC<{
     },
     validationSchema: Yup.object().shape({
       interviewMode: Yup.string().required(" Interview Mode is Required"),
-      interviewDuration: Yup.string().required("Interview Duration is Required"),
-      interviewLanguage: Yup.string().required("Interview Language is Required"),
+      interviewDuration: Yup.string().required(
+        "Interview Duration is Required"
+      ),
+      interviewLanguage: Yup.string().required(
+        "Interview Language is Required"
+      ),
     }),
     onSubmit: (values) => {
       console.log({ values });
       alert("Form successfully submitted");
     },
   });
+  const context = useData();
+
+  useEffect(() => {
+    console.log("Inside the useEffect");
+    console.log(values);
+
+    context?.setState({
+      ...context?.state,
+      interviewSettings: {
+        ...context?.state?.interviewSettings,
+        interviewDuration: values.interviewDuration,
+        interviewLanguage: values.interviewLanguage,
+        interviewMode: values.interviewMode,
+      },
+    });
+  }, [
+    values.interviewDuration,
+    values.interviewLanguage,
+    values.interviewLanguage,
+  ]);
 
   return (
     <Box width="100%" as="form" onSubmit={handleSubmit as any}>
