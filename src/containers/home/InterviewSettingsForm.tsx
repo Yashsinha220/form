@@ -60,7 +60,7 @@ const InterviewDetailsForm: React.FC<{
   }, [
     values.interviewDuration,
     values.interviewLanguage,
-    values.interviewLanguage,
+    values.interviewMode,
   ]);
 
   return (
