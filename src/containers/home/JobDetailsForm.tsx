@@ -22,7 +22,7 @@ const JobDetailsForm: React.FC<{
         jobLocation: Yup.string().required("Job Location is required"),
         jobPosition: Yup.string().required("Job position is required"),
       }),
-      // isInitialValid : true,
+      isInitialValid : true,
       onSubmit: (values) => {
         console.log({ values });
         handleTab(0);
